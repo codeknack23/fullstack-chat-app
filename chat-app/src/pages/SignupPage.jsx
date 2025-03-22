@@ -45,7 +45,7 @@ const SignupPage = () => {
   };
 
   return (<><Navbar/>
-    <div className="min-h-screen grid lg:grid-cols-2 pt-20 px-20">
+    <div className="min-h-screen grid lg:grid-cols-2 pt-20 lg:px-20 px-10">
       {/* left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
