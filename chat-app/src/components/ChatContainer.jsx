@@ -41,8 +41,8 @@ const ChatContainer = () => {
       //   <MessageInput />
       // </div>
 
-      <div className="flex bg-base-300 items-center flex-col justify-center w-full">
-        <Loader2 className="animate-spin" />
+      <div className="flex flex-1  bg-base-300 overflow-auto items-center flex-col justify-center w-full">
+        <Loader2 className="animate-spin opacity-50" />
       </div>
     );
   }

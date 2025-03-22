@@ -37,9 +37,6 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
-      toast.success("Account created", {
-        duration: 2000,
-      });
       get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
@@ -52,7 +49,6 @@ export const useAuthStore = create((set, get) => ({
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      toast.success("logged out");
       get().disconnectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
@@ -64,9 +60,6 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
-      toast.success("Logged in", {
-        duration: 2000,
-      });
       get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
@@ -106,7 +99,6 @@ export const useAuthStore = create((set, get) => ({
 
     socket.on("getOnlineUsers", (userIds) => {
       set({ onlineUsers: userIds });
-      console.log(get().onlineUsers)
     });
   },
   disconnectSocket: async () => {

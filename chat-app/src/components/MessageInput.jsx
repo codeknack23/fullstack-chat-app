@@ -39,7 +39,7 @@ const MessageInput = () => {
         image: imagePreview,
       });
 
-      const audio = new Audio("/sender.mp3");
+      const audio = new Audio("/message.mp3");
       audio.play();
 
       // Clear form
@@ -94,7 +94,7 @@ const MessageInput = () => {
 
           <input
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md"
+            className="w-full input input-bordered rounded-lg input "
             placeholder="Type a message..."
             value={text}
             onChange={(e) => setText(e.target.value)}

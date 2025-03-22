@@ -56,7 +56,7 @@ export const useChatStore = create((set, get) => ({
 
     socket.on("newMessage", (newMessage) => {
       const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-      const audio = new Audio("/receiver.mp3");
+      const audio = new Audio("message.mp3");
       audio.play();
       if (!isMessageSentFromSelectedUser) return;
       set({

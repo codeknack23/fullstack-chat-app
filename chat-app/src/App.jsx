@@ -20,9 +20,9 @@ const App = () => {
 
   if (isCheckingAuth && !authUser) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-lg mb-3 font-bold">Convoo</h1>
-        <LoaderCircle className="size-5 animate-spin" />
+      <div className="flex flex-col items-center  justify-center h-screen">
+        <h1 className="text-2xl mb-4 font-bold opacity-70">Convoo</h1>
+        <LoaderCircle className="size-5 animate-spin opacity-50" />
       </div>
     );
   }
