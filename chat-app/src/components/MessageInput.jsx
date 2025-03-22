@@ -9,6 +9,8 @@ const MessageInput = () => {
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
+  const [isClicked, setIsClicked] = useState(false);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file.type.startsWith("image/")) {
@@ -30,7 +32,7 @@ const MessageInput = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
+    setIsClicked(true);
     if (!text.trim() && !imagePreview) return;
 
     try {
@@ -41,7 +43,7 @@ const MessageInput = () => {
 
       const audio = new Audio("/message.mp3");
       audio.play();
-
+      setIsClicked(false);
       // Clear form
       setText("");
       setImagePreview(null);
@@ -103,7 +105,8 @@ const MessageInput = () => {
         <button
           type="submit"
           className="btn bg-primary"
-          disabled={!text.trim() && !imagePreview}
+          // disabled={!text.trim() && !imagePreview}
+          disabled={isClicked}
         >
           {/* <SendHorizontal size={25} className="p-0.5"/> */}
           <p className="font-lg">Send</p>
