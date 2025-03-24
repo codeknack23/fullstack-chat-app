@@ -225,7 +225,9 @@ const Sidebar = ({ fullWidth }) => {
           </div>
         )}
 
-        {searchedUsers.length === 0 && searchTerm.length > 0 ? (
+        {searchedUsers.length === 0 &&
+        searchTerm.length > 0 &&
+        searchedUsersLoading === false ? (
           <div className="text-center text-zinc-500 py-4">No user found</div>
         ) : (
           ""
