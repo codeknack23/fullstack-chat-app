@@ -5,7 +5,6 @@ import { Users, Ellipsis, MessageSquareText } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore.js";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../lib/axios.js";
-import { formatLastSeen } from "../lib/utils.js";
 
 const Sidebar = ({ fullWidth }) => {
   const { users, selectedUser, isUsersLoading, getUsers, setSelectedUser } =
@@ -163,7 +162,7 @@ const Sidebar = ({ fullWidth }) => {
                 <div className=" md:block text-left min-w-0">
                   <div className="font-medium truncate">{user.fullname}</div>
                   <div className="text-sm text-zinc-400">
-                    {onlineUsers.includes(user._id) ? "Online" : formatLastSeen(user.lastSeen)}
+                    {onlineUsers.includes(user._id) ? "online" : "offline"}
                   </div>
                 
                 </div>
