@@ -79,6 +79,7 @@ const ChatContainer = () => {
               className={`chat-bubble break-words ${
               message.senderId === authUser._id ? "bg-primary" : "bg-chat-my"
             } p-1.5 flex flex-col`}
+            
             >
               {message.image && (
                 <img
