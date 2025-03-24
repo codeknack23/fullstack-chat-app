@@ -173,7 +173,7 @@ const Sidebar = ({ fullWidth }) => {
         {/* After searching users */}
         {searchedUsers.length > 0 &&
           searchTerm.length !==
-            0(
+            0 &&(
               <>
                 {searchedUsers.map((user) => (
                   <button
