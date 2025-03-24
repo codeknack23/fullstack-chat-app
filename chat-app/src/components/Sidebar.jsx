@@ -223,7 +223,7 @@ const Sidebar = ({ fullWidth }) => {
             No users available
           </div>
         )}
-        {searchedUsersLoading(
+        {searchedUsersLoading && (
           <div className="overflow-y-auto w-full py-3">
             {skeletonContacts.map((_, idx) => (
               <div key={idx} className="w-full p-3 flex items-center gap-3">
