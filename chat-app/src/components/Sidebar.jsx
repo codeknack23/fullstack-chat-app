@@ -123,7 +123,7 @@ const Sidebar = ({ fullWidth }) => {
 
       {/* TODO: Online filter toggle */}
       <div className="overflow-y-auto w-full py-3 ">
-        {searchedUsers.length === 0 && !searchTerm.length > 0 && (
+        {searchedUsers.length === 0 && searchTerm.length === 0 && (
           <>
             {users.map((user) => (
               <button
