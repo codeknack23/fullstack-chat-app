@@ -70,8 +70,8 @@ const ChatContainer = () => {
                 />
               </div>
             </div>
-            <div className="chat-footer opacity-50 mt-1">
-              <time className="text-xs opacity-50 ml-1">
+            <div className="chat-footer text-base-content/50 mt-1">
+              <time className="text-xs ml-1">
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>

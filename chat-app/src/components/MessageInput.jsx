@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore.js";
-import { Image, SendHorizontal, X } from "lucide-react";
+import { Image, Loader2, SendHorizontal, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 const MessageInput = () => {
@@ -10,6 +10,7 @@ const MessageInput = () => {
   const { sendMessage } = useChatStore();
 
   const [isClicked, setIsClicked] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -36,11 +37,12 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
+      setIsSending(true);
       await sendMessage({
         text: text.trim(),
         image: imagePreview,
       });
-
+      setIsSending(false);
       const audio = new Audio("/message.mp3");
       audio.play();
       setIsClicked(false);
@@ -109,7 +111,7 @@ const MessageInput = () => {
           disabled={isClicked}
         >
           {/* <SendHorizontal size={25} className="p-0.5"/> */}
-          <p className="font-lg">Send</p>
+          <p className="font-lg">{isSending?"Sending":"Send"}</p>
         </button>
       </form>
     </div>
