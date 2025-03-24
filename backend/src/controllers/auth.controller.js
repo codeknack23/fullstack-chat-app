@@ -115,3 +115,15 @@ export const checkAuth = (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const searchUser = async (req, res) => {
+  const { name } = req.query; // Get the search query from the URL parameter
+  try {
+    const users = await User.find({
+      fullname: { $regex: name, $options: "i" }, // Case-insensitive search
+    }).limit(50); // Limit results for performance
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching users" });
+  }
+};
