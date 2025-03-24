@@ -171,13 +171,15 @@ const Sidebar = ({ fullWidth }) => {
         )}
 
         {/* After searching users */}
-        {searchedUsers.length > 0 && (
-          <>
-            {searchedUsers.map((user) => (
-              <button
-                key={user._id}
-                onClick={() => setSelectedUser(user)}
-                className={`
+        {searchedUsers.length > 0 &&
+          searchTerm.length !==
+            0(
+              <>
+                {searchedUsers.map((user) => (
+                  <button
+                    key={user._id}
+                    onClick={() => setSelectedUser(user)}
+                    className={`
               w-full p-3 flex items-center gap-3
               hover:bg-base-200 transition-colors
               ${
@@ -186,37 +188,39 @@ const Sidebar = ({ fullWidth }) => {
                   : ""
               }
             `}
-              >
-                <div className="relative lg:mx-0">
-                  <img
-                    src={user.profilePic || "/default.png"}
-                    alt={user.name}
-                    className="size-12 object-cover rounded-full"
-                  />
-                  {onlineUsers.includes(user._id) ? (
-                    <span
-                      className="absolute bottom-0 right-0 size-3 bg-green-500 
+                  >
+                    <div className="relative lg:mx-0">
+                      <img
+                        src={user.profilePic || "/default.png"}
+                        alt={user.name}
+                        className="size-12 object-cover rounded-full"
+                      />
+                      {onlineUsers.includes(user._id) ? (
+                        <span
+                          className="absolute bottom-0 right-0 size-3 bg-green-500 
                   rounded-full ring-2 ring-zinc-900"
-                    />
-                  ) : (
-                    <span
-                      className="absolute bottom-0 right-0 size-3 bg-zinc-400
+                        />
+                      ) : (
+                        <span
+                          className="absolute bottom-0 right-0 size-3 bg-zinc-400
                   rounded-full ring-2 ring-zinc-900"
-                    />
-                  )}
-                </div>
+                        />
+                      )}
+                    </div>
 
-                {/* User info - only visible on larger screens */}
-                <div className=" md:block text-left min-w-0">
-                  <div className="font-medium truncate">{user.fullname}</div>
-                  <div className="text-sm text-zinc-400">
-                    {onlineUsers.includes(user._id) ? "Online" : "Offline"}
-                  </div>
-                </div>
-              </button>
-            ))}
-          </>
-        )}
+                    {/* User info - only visible on larger screens */}
+                    <div className=" md:block text-left min-w-0">
+                      <div className="font-medium truncate">
+                        {user.fullname}
+                      </div>
+                      <div className="text-sm text-zinc-400">
+                        {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </>
+            )}
 
         {users.length === 0 && (
           <div className="text-center text-zinc-500 py-4">
