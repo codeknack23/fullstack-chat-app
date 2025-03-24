@@ -212,7 +212,7 @@ const Sidebar = ({ fullWidth }) => {
                 <div className=" md:block text-left min-w-0">
                   <div className="font-medium truncate">{user.fullname}</div>
                   <div className="text-sm text-zinc-400">
-                    {onlineUsers.includes(user._id) ? "Online" : formatLastSeen(user.lastSeen)}
+                    {onlineUsers.includes(user._id) ? "online" : "offline"}
                   </div>
                 </div>
               </button>
