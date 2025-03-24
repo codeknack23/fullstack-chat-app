@@ -108,7 +108,7 @@ const ChatContainer = () => {
       {/* You can open the modal using document.getElementById('ID').showModal() method */}
 
       <dialog id="my_modal_2" className="modal">
-        <div className="modal-box bg-transparent">
+        <div className="modal-box bg-transparent p-0">
         <img
                       src={previewImg}
                       alt="Attachment"
