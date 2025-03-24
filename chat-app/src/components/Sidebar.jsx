@@ -36,9 +36,11 @@ const Sidebar = ({ fullWidth }) => {
   useEffect(() => {
     getUsers();
   }, []);
+
   if (isUsersLoading) {
     return <SidebarSkeleton />;
   }
+
   if (searchedUsersLoading) {
     return <SidebarSkeleton />;
   }
