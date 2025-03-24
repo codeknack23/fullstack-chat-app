@@ -117,11 +117,13 @@ export const checkAuth = (req, res) => {
 };
 
 export const searchUser = async (req, res) => {
-  const { name } = req.query; // Get the search query from the URL parameter
+  const { name } = req.query;
+  const loggedInUserId = req.user._id;
   try {
     const users = await User.find({
-      fullname: { $regex: name, $options: "i" }, // Case-insensitive search
-    }).limit(50); // Limit results for performance
+      fullname: { $regex: name, $options: "i" },
+       _id: { $ne: loggedInUserId },
+    }).limit(50).select("-password"); // Limit results for performance
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: "Error fetching users" });
