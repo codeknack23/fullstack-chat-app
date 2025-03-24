@@ -17,7 +17,6 @@ const Sidebar = ({ fullWidth }) => {
 
   useEffect(() => {
     setSearchedUsersLoading(true);
-    alert("loading");
     if (searchTerm.length >= 1) {
       axiosInstance
         .get(`/auth/search?name=${searchTerm}`)
@@ -42,9 +41,7 @@ const Sidebar = ({ fullWidth }) => {
     return <SidebarSkeleton />;
   }
 
-  if (searchedUsersLoading) {
-    return <SidebarSkeleton />;
-  }
+  
   return (
     <aside
       className={`relative pb-32 lg:pb-20 h-full ${
@@ -226,6 +223,24 @@ const Sidebar = ({ fullWidth }) => {
           <div className="text-center text-zinc-500 py-4">
             No users available
           </div>
+        )}
+        {searchedUsersLoading (
+          <div className="overflow-y-auto w-full py-3">
+        {skeletonContacts.map((_, idx) => (
+          <div key={idx} className="w-full p-3 flex items-center gap-3">
+            {/* Avatar skeleton */}
+            <div className="relative mx-auto lg:mx-0">
+              <div className="skeleton size-12 rounded-full" />
+            </div>
+
+            {/* User info skeleton - only visible on larger screens */}
+            <div className="hidden lg:block text-left min-w-0 flex-1">
+              <div className="skeleton h-4 w-32 mb-2" />
+              <div className="skeleton h-3 w-16" />
+            </div>
+          </div>
+        ))}
+      </div>
         )}
 
         {searchedUsers.length === 0 &&
