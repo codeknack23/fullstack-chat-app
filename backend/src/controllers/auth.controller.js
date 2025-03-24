@@ -1,4 +1,4 @@
-import { generateToken } from "../lib/utils.js";
+import { generateToken, updateLastSeen } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
@@ -61,6 +61,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Incorrect credentials" });
     }
     generateToken(user._id, res);
+    updateLastSeen(user._id);
 
     res.status(200).json({
       _id: user._id,
@@ -77,6 +78,7 @@ export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out" });
+    updateLastSeen(user._id);
   } catch (error) {
     console.log("auth controller : " + error);
     res.status(500).json({ message: "Internal server error" });
@@ -101,6 +103,7 @@ export const updateProfile = async (req, res) => {
     );
 
     res.status(200).json(updatedUser);
+    updateLastSeen(user._id);
   } catch (error) {
     console.log("update profile controller : " + error);
     res.status(500).json({ message: "Internal server error" });
@@ -110,6 +113,7 @@ export const updateProfile = async (req, res) => {
 export const checkAuth = (req, res) => {
   try {
     res.status(200).json(req.user);
+    updateLastSeen(user._id);
   } catch (error) {
     console.log("checkAuth controller : " + error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -122,8 +126,10 @@ export const searchUser = async (req, res) => {
   try {
     const users = await User.find({
       fullname: { $regex: name, $options: "i" },
-       _id: { $ne: loggedInUserId },
-    }).limit(50).select("-password"); // Limit results for performance
+      _id: { $ne: loggedInUserId },
+    })
+      .limit(50)
+      .select("-password"); // Limit results for performance
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: "Error fetching users" });

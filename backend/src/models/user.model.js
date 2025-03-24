@@ -19,6 +19,7 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    lastSeen: { type: Date, default: Date.now },
   },
   { timestamps: true } // This creates 'createdAt' and 'updatedAt' automatically
 );
