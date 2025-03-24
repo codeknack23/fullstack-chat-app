@@ -98,7 +98,7 @@ const Sidebar = ({ fullWidth }) => {
         </div>
       </div>
 
-      <label className="input h-[5em] w-full mb-2 pr-5">
+      <label className="input h-[3em] w-full mb-2 pr-5">
         <svg
           className="h-[1em] opacity-50"
           xmlns="http://www.w3.org/2000/svg"
