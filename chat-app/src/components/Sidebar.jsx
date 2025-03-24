@@ -16,8 +16,9 @@ const Sidebar = ({ fullWidth }) => {
   const [searchedUsersLoading, setSearchedUsersLoading] = useState(false);
 
   useEffect(() => {
+    setSearchedUsersLoading(true);
     if (searchTerm.length >= 1) {
-      setSearchedUsersLoading(true);
+      
       axiosInstance
         .get(`/auth/search?name=${searchTerm}`)
         .then((response) => {
