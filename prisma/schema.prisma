@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Video {
+  id           Int     @id @default(autoincrement())
+  name         String
+  path         String
+  size         Int
+  trimmedPath  String?  
+  subtitlePath String?
+  finalPath    String?
+  status       String
+  createdAt    DateTime @default(now())
+}
