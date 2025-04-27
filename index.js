@@ -67,7 +67,7 @@ app.post('/api/videos/:id/subtitles', async (req, res) => {
   const output = `uploads/subtitled-${Date.now()}.mp4`;
   const subtitleFile = `uploads/${Date.now()}.srt`;
 
-  // Create subtitle file
+  // Create subtitle file.
   const subtitleContent = `1\n00:${start} --> 00:${end}\n${text}`;
   fs.writeFileSync(subtitleFile, subtitleContent);
 
