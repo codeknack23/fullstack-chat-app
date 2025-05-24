@@ -19,7 +19,7 @@ export default function FriendRequests() {
     fetchFriendRequests();
   }, []);
 
-  if (loading) return <div className="p-4 text-zinc-400 flex items-center justify-center h-100"> <Loader2 className="animate-spin opacity-50" /></div>;
+  if (loading) return <div className="p-4 text-zinc-400 flex items-center justify-center h-[100vh]"> <Loader2 className="animate-spin opacity-50" /></div>;
   if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
 
   return (

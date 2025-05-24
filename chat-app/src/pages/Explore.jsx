@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useExploreStore } from "../store/useAuthStore";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft , Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Explore() {
@@ -28,7 +28,7 @@ export default function Explore() {
   }, []);
 
   if (loading || !sentLoaded)
-    return <div className="p-4 text-zinc-400">Loading users...</div>;
+    return <div className="p-4 text-zinc-400 flex items-center justify-center h-[100vh]"> <Loader2 className="animate-spin opacity-50" /></div>;
   if (error)
     return <div className="p-4 text-red-500">Error: {error}</div>;
 
