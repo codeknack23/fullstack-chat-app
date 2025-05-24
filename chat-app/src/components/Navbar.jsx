@@ -34,7 +34,7 @@ const Navbar = () => {
               hover:opacity-80 transition-all
               `}
               >
-                <MessageSquareText className="w-4 h-4" />
+                {/* <MessageSquareText className="w-4 h-4" /> */}
                 <span className="hidden sm:inline text-sm">Chats</span>
               </Link>
             )}
@@ -45,9 +45,30 @@ const Navbar = () => {
               hover:opacity-80 transition-all
               `}
             >
-              <Settings className="w-4 h-4" />
+              {/* <Settings className="w-4 h-4" /> */}
               <span className="hidden sm:inline text-sm">Settings</span>
             </Link>
+
+            {authUser && ( <Link
+              to={"/explore"}
+              className={`
+              flex items-center justify-between btn-sm gap-2 transition-colors
+              hover:opacity-80 transition-all
+              `}
+            >
+              {/* <Settings className="w-4 h-4" /> */}
+              <span className="hidden sm:inline text-sm">Explore</span>
+            </Link>)}
+            {authUser && ( <Link
+              to={"/friend-requests"}
+              className={`
+              flex items-center justify-between btn-sm gap-2 transition-colors
+              hover:opacity-80 transition-all
+              `}
+            >
+              {/* <Settings className="w-4 h-4" /> */}
+              <span className="hidden sm:inline text-sm">Friend Requests</span>
+            </Link>)}
 
             {authUser && (
               <>

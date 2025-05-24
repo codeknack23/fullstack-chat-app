@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
 import { io } from "socket.io-client";
@@ -8,15 +7,11 @@ const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
-
   isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
-
   isCheckingAuth: true,
-
   onlineUsers: [],
-
   socket: null,
 
   checkAuth: async () => {
@@ -73,9 +68,7 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
-      toast.success("Profile Photo Changed", {
-        duration: 2000,
-      });
+      toast.success("Profile Photo Changed", { duration: 2000 });
     } catch (error) {
       toast.error(error);
     } finally {
@@ -85,13 +78,10 @@ export const useAuthStore = create((set, get) => ({
 
   connectSocket: async () => {
     const { authUser } = get();
-
     if (!authUser || get().socket?.connected) return;
 
     const socket = io(BASE_URL, {
-      query: {
-        userId: authUser._id,
-      },
+      query: { userId: authUser._id },
     });
     io.connect();
 
@@ -101,7 +91,55 @@ export const useAuthStore = create((set, get) => ({
       set({ onlineUsers: userIds });
     });
   },
+
   disconnectSocket: async () => {
     if (get().socket?.connected) get().socket.disconnect();
+  },
+}));
+
+
+export const useExploreStore = create((set, get) => ({
+  users: [],
+  loading: false,
+  error: null,
+  sentRequests: new Set(),
+
+  fetchAllUsers: async () => {
+    set({ loading: true, error: null });
+    try {
+      const res = await axiosInstance.get("/users/all-users");
+      set({ users: res.data, loading: false });
+    } catch (error) {
+      set({ error: error.message || "Failed to load users", loading: false });
+      toast.error("Failed to load users");
+    }
+  },
+
+  fetchSentRequests: async () => {
+    try {
+      const res = await axiosInstance.get("/users/sent-requests");
+      // res.data expected to be an array of users or IDs you have sent requests to
+      const sentUserIds = new Set(res.data.map(user => user._id));
+      set({ sentRequests: sentUserIds });
+    } catch (error) {
+      console.error("Failed to fetch sent requests:", error);
+      set({ sentRequests: new Set() }); // reset on error
+    }
+  },
+
+  sendFriendRequest: async (userId) => {
+    if (get().sentRequests.has(userId)) return;
+
+    try {
+      await axiosInstance.post(`/users/friend-request/${userId}`);
+      set((state) => {
+        const updatedSet = new Set(state.sentRequests);
+        updatedSet.add(userId);
+        return { sentRequests: updatedSet };
+      });
+      toast.success("Friend request sent");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to send request");
+    }
   },
 }));

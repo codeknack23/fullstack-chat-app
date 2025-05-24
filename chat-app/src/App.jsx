@@ -6,6 +6,8 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
+import Explore from "./pages/Explore";
+import FriendRequests from "./pages/FriendRequests";
 import { useAuthStore } from "./store/useAuthStore.js";
 import { LoaderCircle } from "lucide-react";
 import { Toaster } from "react-hot-toast";
@@ -46,6 +48,14 @@ const App = () => {
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/explore"
+          element={authUser ? <Explore /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/friend-requests"
+          element={authUser ? <FriendRequests /> : <Navigate to="/login" />}
         />
       </Routes>
 

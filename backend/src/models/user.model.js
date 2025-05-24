@@ -19,12 +19,21 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "",
     },
-    lastSeen: { type: Date, default: Date.now },
+    lastSeen: {
+      type: Date,
+      default: Date.now,
+    },
+
+    // 🆕 Friends: mutual connections
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+
+    // 🆕 Optional: Incoming friend requests (not yet accepted)
+    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
-  { timestamps: true } // This creates 'createdAt' and 'updatedAt' automatically
+  { timestamps: true }
 );
 
-// Virtual to format the createdAt field into "21 March 2025"
+// Virtual for readable creation date
 userSchema.virtual("createdAtFormatted").get(function () {
   return this.createdAt
     ? this.createdAt.toLocaleDateString("en-GB", {
@@ -35,7 +44,6 @@ userSchema.virtual("createdAtFormatted").get(function () {
     : null;
 });
 
-// Ensure virtuals are included in the output when converting to JSON
 userSchema.set("toJSON", {
   virtuals: true,
 });
