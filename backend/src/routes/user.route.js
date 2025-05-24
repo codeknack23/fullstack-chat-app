@@ -3,6 +3,8 @@ import User from "../models/user.model.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { getSentFriendRequests } from "../controllers/user.controller.js";
 
+import { getReceiverSocketId, io } from "../lib/socket.js";
+
 const router = express.Router();
 
 // Get incoming friend requests for logged-in user
@@ -41,7 +43,6 @@ router.get("/all-users", protectRoute, async (req, res) => {
 
 router.get("/sent-requests", protectRoute, getSentFriendRequests);
 
-
 // Send a friend request to another user
 router.post("/friend-request/:id", protectRoute, async (req, res) => {
   try {
@@ -49,7 +50,9 @@ router.post("/friend-request/:id", protectRoute, async (req, res) => {
     const receiverId = req.params.id;
 
     if (senderId === receiverId)
-      return res.status(400).json({ message: "Cannot send request to yourself" });
+      return res
+        .status(400)
+        .json({ message: "Cannot send request to yourself" });
 
     const receiver = await User.findById(receiverId);
     if (!receiver) return res.status(404).json({ message: "User not found" });
@@ -65,6 +68,16 @@ router.post("/friend-request/:id", protectRoute, async (req, res) => {
     // Add sender to receiver's friendRequests
     receiver.friendRequests.push(senderId);
     await receiver.save();
+
+    // Emit event to the receiver if they are online
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      console.log("event emitted");
+      io.to(receiverSocketId).emit("newFriendRequest", {
+        fromUserId: senderId,
+        message: "You have a new friend request!",
+      });
+    }
 
     res.json({ message: "Friend request sent" });
   } catch (err) {
@@ -88,7 +101,9 @@ router.post("/accept-friend-request/:id", protectRoute, async (req, res) => {
 
     // Check if requester sent a friend request
     if (!currentUser.friendRequests.includes(requesterId)) {
-      return res.status(400).json({ message: "No friend request from this user" });
+      return res
+        .status(400)
+        .json({ message: "No friend request from this user" });
     }
 
     // Add each other as friends
@@ -117,7 +132,8 @@ router.post("/reject-friend-request/:id", protectRoute, async (req, res) => {
     const requesterId = req.params.id;
 
     const currentUser = await User.findById(currentUserId);
-    if (!currentUser) return res.status(404).json({ message: "User not found" });
+    if (!currentUser)
+      return res.status(404).json({ message: "User not found" });
 
     currentUser.friendRequests = currentUser.friendRequests.filter(
       (id) => id.toString() !== requesterId
@@ -131,7 +147,5 @@ router.post("/reject-friend-request/:id", protectRoute, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 export default router;

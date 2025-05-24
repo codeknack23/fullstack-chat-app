@@ -9,7 +9,7 @@ import useFriendRequestsStore from "../store/friendRequestsStore";
 
 const Sidebar = ({ fullWidth }) => {
   const { users, selectedUser, isUsersLoading, getUsers, setSelectedUser } = useChatStore();
-  const { onlineUsers, authUser, logout } = useAuthStore();
+  const { onlineUsers, authUser, logout, socket } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [searchedUsersLoading, setSearchedUsersLoading] = useState(false);
@@ -44,6 +44,32 @@ const Sidebar = ({ fullWidth }) => {
     // Fetch friend requests immediately on mount
     fetchFriendRequests();
   }, []);
+
+
+  // Re-fetch when socket receives newFriendRequest event
+    useEffect(() => {
+      if (!socket) return;
+  
+      const handleNewRequest = () => {
+        console.log("✅ Received 'newFriendRequest' via socket");
+       const audio = new Audio("message.mp3");
+      audio.play();
+        fetchFriendRequests();
+      };
+  
+      socket.on("newFriendRequest", handleNewRequest);
+  
+      // Debug: log any socket event
+      socket.onAny((event, ...args) => {
+        console.log("📡 Socket Event Received:", event, args);
+      });
+  
+      return () => {
+        socket.off("newFriendRequest", handleNewRequest);
+        socket.offAny(); // Clean up on unmount
+      };
+    }, [socket]);
+
 
   if (isUsersLoading) {
     return <SidebarSkeleton />;

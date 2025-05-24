@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import useFriendRequestsStore from "../store/friendRequestsStore";
+import { useAuthStore } from "../store/useAuthStore";
 import { X, ArrowLeft, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,14 +14,49 @@ export default function FriendRequests() {
     rejectRequest,
   } = useFriendRequestsStore();
 
+  const { socket } = useAuthStore();
   const navigate = useNavigate();
 
+  // Fetch on initial mount
   useEffect(() => {
     fetchFriendRequests();
   }, []);
 
-  if (loading) return <div className="p-4 text-zinc-400 flex items-center justify-center h-[100vh]"> <Loader2 className="animate-spin opacity-50" /></div>;
-  if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
+  // Re-fetch when socket receives newFriendRequest event
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewRequest = () => {
+      console.log("✅ Received 'newFriendRequest' via socket");
+      const audio = new Audio("message.mp3");
+      audio.play();
+      fetchFriendRequests();
+    };
+
+    socket.on("newFriendRequest", handleNewRequest);
+
+    // Debug: log any socket event
+    socket.onAny((event, ...args) => {
+      console.log("📡 Socket Event Received:", event, args);
+    });
+
+    return () => {
+      socket.off("newFriendRequest", handleNewRequest);
+      socket.offAny(); // Clean up on unmount
+    };
+  }, [socket]);
+
+  if (loading) {
+    return (
+      <div className="p-4 text-zinc-400 flex items-center justify-center h-[100vh]">
+        <Loader2 className="animate-spin opacity-50" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">Error: {error}</div>;
+  }
 
   return (
     <div className="p-6 space-y-4">
@@ -33,7 +69,9 @@ export default function FriendRequests() {
         <span className="text-sm">Back to Chat</span>
       </button>
 
-      <h2 className="text-xl font-semibold text-zinc-200">Incoming Friend Requests {friendRequests.length>0 && `(${friendRequests.length})`}</h2>
+      <h2 className="text-xl font-semibold text-zinc-200">
+        Incoming Friend Requests {friendRequests.length > 0 && `(${friendRequests.length})`}
+      </h2>
 
       {friendRequests.length === 0 ? (
         <p className="text-zinc-400">No new friend requests.</p>
